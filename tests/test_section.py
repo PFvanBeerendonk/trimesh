@@ -251,6 +251,26 @@ class SliceTest(g.unittest.TestCase):
         # volume should match original
         assert g.np.isclose(m.volume, a.volume + b.volume)
 
+    def test_slice_2203(self):
+        m = g.get_mesh("2203_tue_logo.stl")
+
+        assert m.is_watertight
+
+        n = g.np.array([0, 0, 1])
+        o = g.np.array([0, 0, 92.36976624])
+
+        # slice the mesh in two pieces
+        a = m.slice_plane(plane_origin=o, plane_normal=-n, cap=True)
+        b = m.slice_plane(plane_origin=o, plane_normal=n, cap=True)
+
+        # both slices should be watertight
+        assert a.is_watertight
+        assert b.is_watertight
+        # # volume should match original
+        assert g.np.isclose(m.volume, a.volume + b.volume)
+
+
+
     def test_slice_submesh(self):
         bunny = g.get_mesh("bunny.ply")
 
